@@ -1,0 +1,60 @@
+{
+  "name": "adonis-fullstack-app",
+  "version": "4.1.0",
+  "adonis-version": "4.1.0",
+  "description": "The fullstack application boilerplate for Adonisjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node ace test",
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "electron": "electron public/electron.js --watch-poll",
+    "prod": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "keywords": [
+    "adonisjs",
+    "adonis-app"
+  ],
+  "author": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@adonisjs/ace": "^5.0.8",
+    "@adonisjs/auth": "^3.0.7",
+    "@adonisjs/bodyparser": "^2.0.5",
+    "@adonisjs/cors": "^1.0.7",
+    "@adonisjs/fold": "^4.0.9",
+    "@adonisjs/framework": "^5.0.9",
+    "@adonisjs/ignitor": "^2.0.8",
+    "@adonisjs/lucid": "^6.1.3",
+    "@adonisjs/redis": "^2.0.7",
+    "@adonisjs/session": "^1.0.27",
+    "@adonisjs/shield": "^1.0.8",
+    "adonis-cache": "^0.3.4",
+    "adonis-scheduler": "^3.0.2",
+    "axios": "^0.19.1",
+    "collect.js": "^4.19.0",
+    "cross-env": "^5.1",
+    "discord.js": "^11.5.1",
+    "epicgames-fortnite-client": "^2.0.17",
+    "fortnite-api": "^3.4.0",
+    "fortnite-client": "^2.2.0",
+    "laravel-mix": "^2.0",
+    "mysql": "^2.17.1",
+    "tailwindcss": "^1.1.4",
+    "v-tooltip": "^2.0.2",
+    "vue": "^2.5.7",
+    "vue-moment": "^4.1.0",
+    "vue-router": "^3.1.3",
+    "vue-stash": "^2.0.1-beta"
+  },
+  "devDependencies": {},
+  "autoload": {
+    "App": "./app"
+  }
+}
