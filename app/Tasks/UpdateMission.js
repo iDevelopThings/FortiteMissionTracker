@@ -13,6 +13,7 @@ class UpdateMission extends Task {
 
   static get schedule()
   {
+    //return '0 * * * *';
     return '0 0 * * *';
   }
 

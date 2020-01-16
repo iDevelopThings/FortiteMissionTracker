@@ -40,7 +40,7 @@ module.exports = {
       ],
     },
     "RefuelHomebase"          : {
-      title : 'Refuel Homebase',
+      title : 'Refuel The Homebase',
       type  : 'rhb',
       maps  : [
         '/Game/World/MissionGens/MissionGen_RefuelTheBase.MissionGen_RefuelTheBase_C',
@@ -95,6 +95,7 @@ module.exports = {
       maps  : [
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_DtB.MissionGen_T3_R5_DtB_C',
         '/Game/World/MissionGens/Plankerton/ParentMissionGens/MissionGen_DtB_Group.MissionGen_DtB_Group_C',
+        '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_DtB.MissionGen_T3_R5_DtB_C',
       ],
     },
     "DestroyTheEncampments"   : {
@@ -119,31 +120,47 @@ module.exports = {
         '/Game/World/MissionGens/MissionGen_Resupply.MissionGen_Resupply_C',
       ],
     },
+    "Skip"                    : {
+      title : 'Skipped',
+      type  : 'skipped',
+      maps  : [
+        '/Game/World/MissionGens/MissionGen_TheOutpost_PvE_04.MissionGen_TheOutpost_PvE_04_C',
+        '/Game/World/MissionGens/MissionGen_LtR_Twine.MissionGen_LtR_Twine_C',
+      ],
+    },
   },
   rewards  : {
-    "zcp_reagent_c_t01"                 : {
+    /* EVO MATS */
+    "zcp_reagent_c_t01" : {
       title       : 'Pure Drop of Rain',
       type        : 'pdor',
       interesting : true,
     },
-    "zcp_reagent_c_t02"                 : {
+    "zcp_reagent_c_t02" : {
       title       : 'Lightning in a Bottle',
       type        : 'lib',
       interesting : true,
     },
-    "zcp_reagent_c_t03"                 : {
+    "zcp_reagent_c_t03" : {
       title       : 'Eye of the storm',
       type        : 'eots',
       interesting : true,
     },
-    "zcp_reagent_c_t04"                 : {
+    "zcp_reagent_c_t04" : {
       title       : 'Storm Shard',
       type        : 'ss',
       interesting : true,
     },
+
+    /* PERK UPS */
     "zcp_reagent_alteration_generic"    : {
       title       : 'Re-Perk',
       type        : 'rp',
+      interesting : true,
+    },
+    "zcp_reagent_alteration_upgrade_r"  : {
+      title       : 'Rare Perk-up',
+      type        : 'rpu',
       interesting : true,
     },
     "zcp_reagent_alteration_upgrade_vr" : {
@@ -155,45 +172,6 @@ module.exports = {
       title       : 'Legendary Perk-up',
       type        : 'lpu',
       interesting : true,
-    },
-    "zcp_schematicxp"                   : {
-      title       : 'Schematic XP',
-      type        : 'schemxp',
-      interesting : false,
-    },
-    "zcp_heroxp"                        : {
-      title       : 'Hero XP',
-      type        : 'heroxp',
-      interesting : false,
-    },
-    "zcp_personnelxp"                   : {
-      title       : 'Survivor XP',
-      type        : 'surv-xp',
-      interesting : false,
-    },
-    "zcp_eventscaling"                  : {
-      title       : 'Gold',
-      type        : 'gold',
-      interesting : false,
-      item_reward : true,
-    },
-    "campaign_event_currency"           : {
-      title       : 'Event Tickets',
-      type        : 'tickets',
-      interesting : false,
-      item_reward : true,
-    },
-    "zcp_crystal_sunbeam"               : {
-      title       : 'Sunbeam',
-      type        : 'sun',
-      interesting : false,
-      item_reward : true,
-    },
-    "zcp_crystal_shadowshard"           : {
-      title       : 'Shadowshard',
-      type        : 'shadow',
-      interesting : false,
-      item_reward : true,
     },
     "reagent_alteration_ele_water"      : {
       title       : 'Frost-Up',
@@ -210,23 +188,84 @@ module.exports = {
       type        : 'ampup',
       interesting : false,
     },
-    "zcp_improvised"                    : {
+
+    /* ALL XPS */
+    "zcp_schematicxp" : {
+      title       : 'Schematic XP',
+      type        : 'schemxp',
+      interesting : false,
+    },
+    "zcp_heroxp"      : {
+      title       : 'Hero XP',
+      type        : 'heroxp',
+      interesting : false,
+    },
+    "zcp_personnelxp" : {
+      title       : 'Survivor XP',
+      type        : 'surv-xp',
+      interesting : false,
+    },
+
+    /* CURRENCIES */
+    "zcp_eventscaling"        : {
+      title       : 'Gold',
+      type        : 'gold',
+      interesting : false,
+      item_reward : true,
+    },
+    "campaign_event_currency" : {
+      title       : 'Event Tickets',
+      type        : 'tickets',
+      interesting : false,
+      item_reward : true,
+    },
+
+    /* LOOT ITEMS */
+    "zcp_crystal_sunbeam"     : {
+      title       : 'Sunbeam',
+      type        : 'sun',
+      interesting : false,
+      item_reward : true,
+    },
+    "zcp_crystal_shadowshard" : {
+      title       : 'Shadowshard',
+      type        : 'shadow',
+      interesting : false,
+      item_reward : true,
+    },
+    "zcp_improvised"          : {
       title       : 'Active Power Cell',
       type        : 'powercell',
       interesting : false,
       item_reward : true,
     },
-    "zcp_ore_obsidian"                  : {
+    "zcp_ore_obsidian"        : {
       title       : 'Obsidian Ore',
       type        : 'obsidian_ore',
       interesting : false,
       item_reward : true,
     },
-    "zcp_ore_brightcore"                : {
+    "zcp_ore_brightcore"      : {
       title       : 'Brightcore',
       type        : 'brightcore',
       interesting : false,
       item_reward : true,
+    },
+
+    /**
+     * Other stuff
+     */
+    "workerbasic"         : {
+      title       : 'Survivor',
+      type        : 'survivor',
+      interesting : false,
+      npc         : true,
+    },
+    "did_defendershotgun" : {
+      title       : 'Shotgun Defender',
+      type        : 'defender-sg',
+      interesting : false,
+      npc         : true,
     },
   },
 

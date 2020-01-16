@@ -41,6 +41,7 @@
     "collect.js": "^4.19.0",
     "cross-env": "^5.1",
     "discord.js": "^11.5.1",
+    "epicgames-client": "^2.0.20",
     "epicgames-fortnite-client": "^2.0.17",
     "fortnite-api": "^3.4.0",
     "fortnite-client": "^2.2.0",

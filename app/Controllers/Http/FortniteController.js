@@ -27,7 +27,7 @@ class FortniteController {
 
     conversions.rewards = collect(Conversions.rewards)
       .filter(reward => {
-        return reward.item_reward === undefined;
+        return reward.item_reward === undefined && reward.npc === undefined;
       }).toArray();
 
     return response.json(conversions);

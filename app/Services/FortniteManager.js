@@ -31,13 +31,30 @@ class FortniteManager {
     return new Promise((resolve, reject) => {
       this.eg.init().then(async (success) => {
 
+        /**
+         LogInit: Build: ++Fortnite+Release-11.40-CL-10993225
+         LogInit: Engine Version: 4.24.0-10993225+++Fortnite+Release-11.40
+         LogInit: Compatible Engine Version: 4.24.0-10981341+++Fortnite+Release-11.40
+         LogInit: Net CL: 10482997
+         */
         if (!success)
           return reject('Cannot initialize EpicGames launcher.');
 
-        if (!await this.eg.login())
-          return reject('Cannot login on EpicGames account.');
+        try {
+          let login = await this.eg.login();
 
-        const fortnite = await this.eg.runGame(FFF);
+          if (!login)
+            return reject('Cannot login on EpicGames account.');
+        } catch (e) {
+          console.error(e);
+          reject(e.toString());
+        }
+
+        const fortnite = await this.eg.runGame(FFF, {
+          build       : '++Fortnite+Release-11.40-CL-10993225',
+          engineBuild : '4.24.0-10993225+++Fortnite+Release-11.40',
+          netCL       : 10482997,
+        });
         const stw      = await fortnite.runSubGame(ESubGame.SaveTheWorld);
 
         this.token = stw.fn.auth.accessToken;
@@ -74,14 +91,13 @@ class FortniteManager {
 
           Object.values(Conversions.missions)
             .forEach(m => {
-              //console.log(m, mission);
               if (m.maps.includes(mission.missionGenerator)) {
                 mission.map = m;
               }
             });
 
           if (!mission.map) {
-            console.log(mission.missionGenerator);
+            console.log(`MAP MISSING:`, mission.missionGenerator);
           }
 
           let is4x      = false;
@@ -102,12 +118,13 @@ class FortniteManager {
                 });
 
               if (!item.slug) {
-                console.log('Item not handled: ', item);
+                console.log(`MISSION REWARD ITEM MISSING:`, item);
               }
 
               switch (item.slug) {
                 case "epu":
                 case "lpu":
+                case "rpu":
                   isSpecial = true;
               }
 
@@ -125,7 +142,7 @@ class FortniteManager {
           //Fix up items to be one quantity when there is multiple, ie, perkup schematic xp etc
 
           let rewardsToTake = collect(missionRewards)
-            .whereIn('slug', ['lpu', 'epu', 'schemxp', 'heroxp', 'surv-xp'])
+            .whereIn('slug', ['lpu', 'epu', 'rpu', 'schemxp', 'heroxp', 'surv-xp'])
             .groupBy('slug')
             .map((items, slug) => {
               let item  = items.first();
@@ -137,7 +154,7 @@ class FortniteManager {
             .toArray();
 
           missionRewards = collect(missionRewards)
-            .whereNotIn('slug', ['lpu', 'epu', 'schemxp', 'heroxp', 'surv-xp'])
+            .whereNotIn('slug', ['lpu', 'epu', 'rpu', 'schemxp', 'heroxp', 'surv-xp'])
             .toArray();
 
           missionRewards = [...missionRewards, ...rewardsToTake];
@@ -155,8 +172,14 @@ class FortniteManager {
                 .map(item => {
                   Object.keys(Conversions.rewards)
                     .forEach(conver => {
+                      item.originalItemType = item.itemType;
+
                       if (item.itemType.includes('AccountResource:'))
                         item.itemType = item.itemType.replace('AccountResource:', '');
+                      if (item.itemType.includes('Worker:'))
+                        item.itemType = item.itemType.replace('Worker:', '').split('_')[0];
+                      if (item.itemType.includes('Defender:'))
+                        item.itemType = item.itemType.replace('Defender:', '').split('_')[0];
 
                       if (conver.includes(item.itemType)) {
                         item.type        = conver;
@@ -169,12 +192,13 @@ class FortniteManager {
                   ;
 
                   if (!item.slug) {
-                    console.log('Item not handled: ', item);
+                    console.log('MISSION ALERT ITEM NOT HANDLED', item);
                   }
 
                   switch (item.slug) {
                     case "epu":
                     case "lpu":
+                    case "rpu":
                       isSpecial = true;
                   }
 
@@ -197,6 +221,7 @@ class FortniteManager {
             alerts    : missionAlerts ? missionAlerts : [],
           };
         })
+        .filter(m => m.map.type !== 'skipped')
         .toArray();
 
       return twineMissionsMapped;
@@ -240,7 +265,7 @@ class FortniteManager {
         let reward = mission.rewards[r];
 
         if (!reward.title) {
-          console.log('Reward not added to conversions, skipping: ', reward);
+          //console.log('Reward not added to conversions, skipping: ', mission.generator, reward);
           continue;
         }
 
@@ -261,7 +286,7 @@ class FortniteManager {
         let reward = mission.alerts[r];
 
         if (!reward.title) {
-          console.log('Reward not added to conversions, skipping: ', reward);
+          //console.log('Reward not added to conversions, skipping: ', mission.generator, reward);
           continue;
         }
 
