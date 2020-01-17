@@ -25906,6 +25906,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Home",
@@ -26442,9 +26454,16 @@ var render = function() {
                         "div",
                         {
                           staticClass:
-                            "w-1/3 flex items-center border-r pr-4 border-gray-700"
+                            "w-2/5 flex items-center border-r pr-4 border-gray-700"
                         },
                         [
+                          _c("h1", { staticClass: "font-bold mr-3" }, [
+                            _vm._v(
+                              "⚡ " +
+                                _vm._s(mission.level ? mission.level : "..")
+                            )
+                          ]),
+                          _vm._v(" "),
                           _c("img", {
                             staticClass: "mr-4",
                             attrs: {
@@ -26458,7 +26477,7 @@ var render = function() {
                         ]
                       ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "w-1/3 pl-4" }, [
+                      _c("div", { staticClass: "w-1/5 pl-4" }, [
                         _c("strong", { staticClass: "text-gray-600" }, [
                           _vm._v("Rewards:")
                         ]),
@@ -26519,7 +26538,7 @@ var render = function() {
                         )
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "w-1/3 pl-4" }, [
+                      _c("div", { staticClass: "w-1/5 pl-4" }, [
                         _c("strong", { staticClass: "text-gray-600" }, [
                           _vm._v("Alert Rewards:")
                         ]),
@@ -26565,6 +26584,50 @@ var render = function() {
                                   )
                                 }
                               ),
+                              0
+                            )
+                          : _c("div", [
+                              _vm._v(
+                                "\n                None...\n              "
+                              )
+                            ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "w-1/5 pl-4" }, [
+                        mission.modifiers.length
+                          ? _c(
+                              "div",
+                              { staticClass: "flex items-center flex-wrap" },
+                              _vm._l(mission.modifiers, function(modifier) {
+                                return _c(
+                                  "div",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "tooltip",
+                                        rawName: "v-tooltip",
+                                        value:
+                                          "<strong>" +
+                                          modifier.title +
+                                          "</strong> <br>" +
+                                          modifier.description,
+                                        expression:
+                                          "`<strong>${modifier.title}</strong> <br>${modifier.description}`"
+                                      }
+                                    ],
+                                    staticClass: "flex items-center mb-1 mr-1"
+                                  },
+                                  [
+                                    _c("img", {
+                                      staticStyle: {
+                                        height: "30px",
+                                        "min-width": "30px"
+                                      },
+                                      attrs: { src: modifier.image, alt: "" }
+                                    })
+                                  ]
+                                )
+                              }),
                               0
                             )
                           : _c("div", [

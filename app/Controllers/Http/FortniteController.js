@@ -8,6 +8,8 @@ const MissionReward = use('App/Models/MissionReward');
 const Conversions   = use('App/Services/FortniteConversions');
 const UpdateMission = use('App/Tasks/UpdateMission');
 const collect       = require('collect.js');
+const fs            = require('fs');
+const Helpers       = use('Helpers');
 
 class FortniteController {
 
@@ -58,7 +60,10 @@ class FortniteController {
 
       await fortniteManager.updateSavedMissions();
     } catch (e) {
-      return response.status(500).json(e);
+      if (!Object.keys(e).length)
+        throw e;
+
+      return response.status(500).json({error : e, t : Object.keys(e).length ? 'r' : 'y', m : e.toString()});
     }
 
     console.log('Successfully updated missions.');
@@ -69,6 +74,7 @@ class FortniteController {
   {
     let missions = await Mission.query()
       .with('rewards')
+      .with('modifiers')
       .where(builder => {
 
         if (request.input('maps')) {
@@ -93,8 +99,24 @@ class FortniteController {
             });
         }
       })
-      .orderBy('tile_index', 'asc')
+      .orderBy('level', 'asc')
       .fetch();
+
+    missions = missions.toJSON();
+
+    missions.forEach(mission => {
+
+      let modifiers = mission.modifiers;
+
+      modifiers.forEach(modifier => {
+        if (modifier.slug === 'na') {
+          console.log('NOT HANDLED.', `PL: ${mission.level} ${mission.title}`, modifier.type);
+        } else if (!fs.existsSync(Helpers.publicPath(`icons/modifiers/${modifier.slug}.png`))) {
+          console.log('IMAGE DOESNT EXIST', `PL: ${mission.level} ${mission.title}`, Helpers.publicPath(`icons/modifiers/${modifier.slug}.png`));
+        }
+      });
+
+    });
 
     return response.json(missions);
   }

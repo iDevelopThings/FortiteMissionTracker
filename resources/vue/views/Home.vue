@@ -82,11 +82,12 @@
           <div v-if="!loading && missions" class="p-4">
 
             <div v-for="mission in missions" class="bg-gray-800 mb-4 p-4 shadow flex items-center">
-              <div class="w-1/3 flex items-center border-r pr-4 border-gray-700">
+              <div class="w-2/5 flex items-center border-r pr-4 border-gray-700">
+                <h1 class="font-bold mr-3">⚡ {{mission.level ? mission.level : '..'}}</h1>
                 <img :src="`/icons/missions/${mission.type}.png`" class="mr-4" alt="" width="28px">
                 <strong>{{mission.title}}</strong>
               </div>
-              <div class="w-1/3 pl-4">
+              <div class="w-1/5 pl-4">
                 <strong class="text-gray-600">Rewards:</strong>
                 <div class="flex items-center">
                   <div v-for="reward in getRewardsType(mission, 'rewards')" class="flex items-center mr-2" v-tooltip="reward.title">
@@ -97,11 +98,22 @@
                   </div>
                 </div>
               </div>
-              <div class="w-1/3 pl-4">
+              <div class="w-1/5 pl-4">
                 <strong class="text-gray-600">Alert Rewards:</strong>
                 <div class="flex items-center" v-if="getRewardsType(mission, 'alerts').length">
                   <div v-for="reward in getRewardsType(mission, 'alerts')" class="flex items-center mr-2" v-tooltip="reward.title">
                     {{reward.quantity}}x <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2" alt="" width="28px">
+                  </div>
+                </div>
+                <div v-else>
+                  None...
+                </div>
+              </div>
+              <div class="w-1/5 pl-4">
+                <div class="flex items-center flex-wrap" v-if="mission.modifiers.length">
+                  <div v-for="modifier in mission.modifiers" class="flex items-center mb-1 mr-1"
+                       v-tooltip="`<strong>${modifier.title}</strong> <br>${modifier.description}`">
+                    <img :src="modifier.image" class="" alt="" style="height: 30px; min-width: 30px;">
                   </div>
                 </div>
                 <div v-else>

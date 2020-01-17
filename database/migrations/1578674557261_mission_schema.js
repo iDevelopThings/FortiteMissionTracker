@@ -12,6 +12,8 @@ class MissionSchema extends Schema {
       table.integer('tile_index');
       table.string('type');
       table.boolean('is_special');
+      table.string('generator');
+      table.integer('level').nullable();
       table.timestamps();
     });
   }

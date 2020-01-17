@@ -10,6 +10,11 @@ class Mission extends Model {
     return this.hasMany('App/Models/MissionReward');
   }
 
+  modifiers()
+  {
+    return this.hasMany('App/Models/MissionModifier');
+  }
+
 }
 
 module.exports = Mission;

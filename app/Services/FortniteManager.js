@@ -1,13 +1,14 @@
-const Env           = use('Env');
-const EGClient      = require('epicgames-client').Client;
-const FFF           = require('epicgames-fortnite-client');
-const {ESubGame}    = FFF;
-const axios         = require('axios');
-const collect       = require('collect.js');
-const Conversions   = require('./FortniteConversions');
-const Cache         = use('Cache');
-const Mission       = use('App/Models/Mission');
-const MissionReward = use('App/Models/MissionReward');
+const Env             = use('Env');
+const EGClient        = require('epicgames-client').Client;
+const FFF             = require('epicgames-fortnite-client');
+const {ESubGame}      = FFF;
+const axios           = require('axios');
+const collect         = require('collect.js');
+const Conversions     = require('./FortniteConversions');
+const Cache           = use('Cache');
+const Mission         = use('App/Models/Mission');
+const MissionReward   = use('App/Models/MissionReward');
+const MissionModifier = use('App/Models/MissionModifier');
 
 class FortniteManager {
 
@@ -115,6 +116,7 @@ class FortniteManager {
             let m = mmm[i];
             if (m.maps === undefined) {
               console.log('errored part', mission, m);
+              continue;
             }
             if (m.maps.includes(mission.missionGenerator)) {
               mission.map = m;
@@ -122,19 +124,15 @@ class FortniteManager {
             }
           }
 
-          /* Object.values(Conversions.missions)
-           .forEach(m => {
-           if (m.maps === undefined) {
-           console.log('errored part', mission, m);
-           }
-           if (m.maps.includes(mission.missionGenerator)) {
-           mission.map = m;
-           }
-           });*/
-
           if (!mission.map) {
             console.log(`MAP MISSING:`, mission.missionGenerator);
           }
+
+          if (Conversions.tiles[mission.tileIndex] !== undefined) {
+            mission.powerLevel = Conversions.tiles[mission.tileIndex].level;
+            console.log(mission);
+          } else
+            mission.powerLevel = null;
 
           let is4x      = false;
           let isSpecial = false;
@@ -184,7 +182,7 @@ class FortniteManager {
               let item  = items.first();
               let count = collect(items).count();
 
-              item.quantity = count;
+              item.quantity = item.quantity === 4 ? item.quantity : count;
               return item;
             })
             .toArray();
@@ -200,6 +198,26 @@ class FortniteManager {
             .first();
 
           if (missionAlerts) {
+            if (missionAlerts.missionAlertModifiers && missionAlerts.missionAlertModifiers.items) {
+              mission.modifiers = missionAlerts.missionAlertModifiers.items.map(m => {
+                let modifier = Conversions.modifiers[m.itemType];
+                return (modifier === undefined ? {
+                  title       : 'Not Added',
+                  slug        : 'na',
+                  description : 'Not Added...',
+                  type        : m.itemType,
+                  image       : `/icons/modifiers/na.png`,
+                } : {
+                  title       : modifier.title,
+                  slug        : modifier.slug,
+                  description : modifier.description,
+                  type        : m.itemType,
+                  image       : `/icons/modifiers/${modifier.slug}.png`,
+                });
+              });
+            } else {
+              mission.modifiers = [];
+            }
             if (missionAlerts.missionAlertRewards && missionAlerts.missionAlertRewards.items) {
               missionAlerts = collect(missionAlerts.missionAlertRewards.items)
                 .filter(item => {
@@ -248,13 +266,15 @@ class FortniteManager {
           }
 
           return {
-            tileIndex : mission.tileIndex,
-            generator : mission.missionGenerator,
-            is4x      : is4x,
-            isSpecial : isSpecial,
-            map       : mission.map ? mission.map : null,
-            rewards   : missionRewards,
-            alerts    : missionAlerts ? missionAlerts : [],
+            tileIndex  : mission.tileIndex,
+            generator  : mission.missionGenerator,
+            is4x       : is4x,
+            isSpecial  : isSpecial,
+            map        : mission.map ? mission.map : null,
+            rewards    : missionRewards,
+            modifiers  : mission.modifiers,
+            powerLevel : mission.powerLevel,
+            alerts     : missionAlerts ? missionAlerts : [],
           };
         })
         .filter(m => m.map.type !== 'skipped')
@@ -269,6 +289,7 @@ class FortniteManager {
   async updateSavedMissions()
   {
     try {
+      await MissionModifier.query().where('id', '>', 0).delete();
       await MissionReward.query().where('id', '>', 0).delete();
       await Mission.query().where('id', '>', 0).delete();
 
@@ -296,6 +317,8 @@ class FortniteManager {
           tile_index : mission.tileIndex,
           type       : mission.map.type,
           is_special : mission.isSpecial,
+          generator  : mission.generator,
+          level      : mission.powerLevel,
         });
 
         for (let r = 0; r < mission.rewards.length; r++) {
@@ -339,6 +362,20 @@ class FortniteManager {
           });
 
         }
+
+        if (mission.modifiers)
+          for (let r = 0; r < mission.modifiers.length; r++) {
+            let modifier = mission.modifiers[r];
+
+            await MissionModifier.create({
+              mission_id  : missionModel.id,
+              title       : modifier.title,
+              type        : modifier.type,
+              slug        : modifier.slug,
+              description : modifier.description ? modifier.description : null,
+            });
+
+          }
 
       }
     } catch (e) {
