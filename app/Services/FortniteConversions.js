@@ -1,6 +1,6 @@
 module.exports = {
   missions : {
-    "RetrieveTheData"         : {
+    RetrieveTheData         : {
       title : 'Retrieve The Data',
       type  : 'rtd',
       maps  : [
@@ -8,14 +8,14 @@ module.exports = {
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_RtD.MissionGen_T3_R5_RtD_C',
       ],
     },
-    "MythicStormKing"         : {
+    MythicStormKing         : {
       title : 'Mythic Storm King',
       type  : 'msk',
       maps  : [
         '/Game/World/MissionGens/TestMissionGens/MissionGen_DUDEBRO.MissionGen_DUDEBRO_C',
       ],
     },
-    "EvacuateTheShelter"      : {
+    EvacuateTheShelter      : {
       title : 'Evacuate The Shelter',
       type  : 'ets',
       maps  : [
@@ -23,7 +23,7 @@ module.exports = {
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_EtShelter.MissionGen_T3_R5_EtShelter_C',
       ],
     },
-    "RepairTheShelter"        : {
+    RepairTheShelter        : {
       title : 'Repair The Shelter',
       type  : 'rts',
       maps  : [
@@ -31,7 +31,7 @@ module.exports = {
         '/Game/World/MissionGens/Plankerton/Region_2/MissionGen_RtS_Group.MissionGen_RtS_Group_C',
       ],
     },
-    "RideTheLightning"        : {
+    RideTheLightning        : {
       title : 'Ride The Lightning',
       type  : 'rtl',
       maps  : [
@@ -39,42 +39,42 @@ module.exports = {
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_RtL.MissionGen_T3_R5_RtL_C',
       ],
     },
-    "RefuelHomebase"          : {
+    RefuelHomebase          : {
       title : 'Refuel The Homebase',
       type  : 'rhb',
       maps  : [
         '/Game/World/MissionGens/MissionGen_RefuelTheBase.MissionGen_RefuelTheBase_C',
       ],
     },
-    "BuildTheRadarGrid"       : {
+    BuildTheRadarGrid       : {
       title : 'Build the radar grid',
       type  : 'btrg',
       maps  : [
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_BuildtheRadarGrid.MissionGen_T3_R5_BuildtheRadarGrid_C',
       ],
     },
-    "FightTheStorm"           : {
+    FightTheStorm           : {
       title : 'Fight The Storm',
       type  : 'fts',
       maps  : [
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_1Gate.MissionGen_T3_R5_1Gate_C',
       ],
     },
-    "FightCategoryTwoStorm"   : {
+    FightCategoryTwoStorm   : {
       title : 'Fight Category 2 Storm',
       type  : 'fc2s',
       maps  : [
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_2Gates.MissionGen_T3_R5_2Gates_C',
       ],
     },
-    "FightCategoryThreeStorm" : {
+    FightCategoryThreeStorm : {
       title : 'Fight Category 3 Storm',
       type  : 'fcts',
       maps  : [
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_3Gates.MissionGen_T3_R5_3Gates_C',
       ],
     },
-    "FightCategoryFourStorm"  : {
+    FightCategoryFourStorm  : {
       title : 'Fight Category 4 Storm',
       type  : 'fcfs',
       maps  : [
@@ -82,14 +82,14 @@ module.exports = {
         '/Game/World/MissionGens/MissionGen_4Gates_Group.MissionGen_4Gates_Group_C',
       ],
     },
-    "EliminateAndCollect"     : {
+    EliminateAndCollect     : {
       title : 'Eliminate and Collect',
       type  : 'ec',
       maps  : [
         '/Game/World/MissionGens/MissionGen_EliminateAndCollect_WR.MissionGen_EliminateAndCollect_WR_C',
       ],
     },
-    "DeliverTheBomb"          : {
+    DeliverTheBomb          : {
       title : 'Deliver the Bomb',
       type  : 'dtb',
       maps  : [
@@ -98,21 +98,21 @@ module.exports = {
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_DtB.MissionGen_T3_R5_DtB_C',
       ],
     },
-    "DestroyTheEncampments"   : {
+    DestroyTheEncampments   : {
       title : 'Destroy The Encampments',
       type  : 'dte',
       maps  : [
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_DtE.MissionGen_T3_R5_DtE_C',
       ],
     },
-    "RescueTheSurvivors"      : {
+    RescueTheSurvivors      : {
       title : 'Rescue The Survivors',
       type  : 'rtsurv',
       maps  : [
         '/Game/World/MissionGens/CannyValley/MissionGen_T3_R5_EtSurvivors.MissionGen_T3_R5_EtSurvivors_C',
       ],
     },
-    "Resupply"                : {
+    Resupply                : {
       title : 'Resupply',
       type  : 'resup',
       maps  : [
@@ -120,7 +120,7 @@ module.exports = {
         '/Game/World/MissionGens/MissionGen_Resupply.MissionGen_Resupply_C',
       ],
     },
-    "Skip"                    : {
+    Skip                    : {
       title : 'Skipped',
       type  : 'skipped',
       maps  : [

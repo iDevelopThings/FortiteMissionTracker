@@ -89,15 +89,28 @@ class FortniteManager {
       let twineMissionsMapped = collect(twineMissions[0].availableMissions)
         .map(mission => {
 
-          Object.values(Conversions.missions)
-            .forEach(m => {
-              if (m.maps === undefined) {
-                console.log('errored part', mission, m);
-              }
-              if (m.maps.includes(mission.missionGenerator)) {
-                mission.map = m;
-              }
-            });
+          let mmm = Object.values(Conversions.missions);
+
+          for (let i = 0; i < mmm.length; i++) {
+            let m = mmm[i];
+            if (m.maps === undefined) {
+              console.log('errored part', mission, m);
+            }
+            if (m.maps.includes(mission.missionGenerator)) {
+              mission.map = m;
+              break;
+            }
+          }
+
+          /* Object.values(Conversions.missions)
+           .forEach(m => {
+           if (m.maps === undefined) {
+           console.log('errored part', mission, m);
+           }
+           if (m.maps.includes(mission.missionGenerator)) {
+           mission.map = m;
+           }
+           });*/
 
           if (!mission.map) {
             console.log(`MAP MISSING:`, mission.missionGenerator);
@@ -235,77 +248,81 @@ class FortniteManager {
 
   async updateSavedMissions()
   {
-    await MissionReward.query().where('id', '>', 0).delete();
-    await Mission.query().where('id', '>', 0).delete();
+    try {
+      await MissionReward.query().where('id', '>', 0).delete();
+      await Mission.query().where('id', '>', 0).delete();
 
-    const fortniteToken = await Cache.get('fortniteToken');
-    if (fortniteToken) {
-      this.setToken(fortniteToken);
-    } else {
-      let token = await this.login();
-      await Cache.put('fortniteToken', token, 60);
-    }
-
-    let missions = await this.getLatestMissions();
-
-    for (let i = 0; i < missions.length; i++) {
-
-      let mission = missions[i];
-
-      if (!mission.map) {
-        console.log('Skipping mission, doesnt have map added: ', mission.generator);
-        continue;
+      const fortniteToken = await Cache.get('fortniteToken');
+      if (fortniteToken) {
+        this.setToken(fortniteToken);
+      } else {
+        let token = await this.login();
+        await Cache.put('fortniteToken', token, 60);
       }
 
-      let missionModel = await Mission.create({
-        title      : mission.map.title,
-        tile_index : mission.tileIndex,
-        type       : mission.map.type,
-        is_special : mission.isSpecial,
-      });
+      let missions = await this.getLatestMissions();
 
-      for (let r = 0; r < mission.rewards.length; r++) {
-        let reward = mission.rewards[r];
+      for (let i = 0; i < missions.length; i++) {
 
-        if (!reward.title) {
-          //console.log('Reward not added to conversions, skipping: ', mission.generator, reward);
+        let mission = missions[i];
+
+        if (!mission.map) {
+          console.log('Skipping mission, doesnt have map added: ', mission.generator);
           continue;
         }
 
-        await MissionReward.create({
-          mission_id   : missionModel.id,
-          title        : reward.title,
-          type         : reward.type,
-          slug         : reward.slug,
-          interesting  : reward.interesting,
-          alert_reward : 0,
-          quantity     : reward.quantity,
-          amount_type  : reward.amountType,
+        let missionModel = await Mission.create({
+          title      : mission.map.title,
+          tile_index : mission.tileIndex,
+          type       : mission.map.type,
+          is_special : mission.isSpecial,
         });
 
-      }
+        for (let r = 0; r < mission.rewards.length; r++) {
+          let reward = mission.rewards[r];
 
-      for (let r = 0; r < mission.alerts.length; r++) {
-        let reward = mission.alerts[r];
+          if (!reward.title) {
+            //console.log('Reward not added to conversions, skipping: ', mission.generator, reward);
+            continue;
+          }
 
-        if (!reward.title) {
-          //console.log('Reward not added to conversions, skipping: ', mission.generator, reward);
-          continue;
+          await MissionReward.create({
+            mission_id   : missionModel.id,
+            title        : reward.title,
+            type         : reward.type,
+            slug         : reward.slug,
+            interesting  : reward.interesting,
+            alert_reward : 0,
+            quantity     : reward.quantity,
+            amount_type  : reward.amountType,
+          });
+
         }
 
-        await MissionReward.create({
-          mission_id   : missionModel.id,
-          title        : reward.title,
-          type         : reward.type,
-          slug         : reward.slug,
-          interesting  : reward.interesting,
-          alert_reward : true,
-          quantity     : reward.quantity,
-          amount_type  : reward.amountType,
-        });
+        for (let r = 0; r < mission.alerts.length; r++) {
+          let reward = mission.alerts[r];
+
+          if (!reward.title) {
+            //console.log('Reward not added to conversions, skipping: ', mission.generator, reward);
+            continue;
+          }
+
+          await MissionReward.create({
+            mission_id   : missionModel.id,
+            title        : reward.title,
+            type         : reward.type,
+            slug         : reward.slug,
+            interesting  : reward.interesting,
+            alert_reward : true,
+            quantity     : reward.quantity,
+            amount_type  : reward.amountType,
+          });
+
+        }
 
       }
-
+    } catch (e) {
+      throw e;
     }
   }
 

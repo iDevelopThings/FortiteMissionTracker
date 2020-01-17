@@ -54,9 +54,14 @@ class FortniteController {
 
   async store({request, response})
   {
-    let fortniteManager = new FortniteManager();
+    try {
+      let fortniteManager = new FortniteManager();
 
-    await fortniteManager.updateSavedMissions();
+      await fortniteManager.updateSavedMissions();
+    } catch (e) {
+      console.error(e);
+      return response.status(500).json(e);
+    }
 
     console.log('Successfully updated missions.');
     return response.json({message : 'Done'});
