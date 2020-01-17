@@ -2,11 +2,15 @@
   <div class="h-full flex justify-center">
     <div class="container">
       <div class="flex h-full">
+
         <div class="w-1/4 p-4">
-          <div class="bg-gray-800 rounded shadow">
+
+          <div class="bg-gray-800 rounded shadow w-full">
+
             <div class="p-4 bg-gray-700">
               <h4 class="font-bold">Filter Missions</h4>
             </div>
+
             <div class="p-4 rounded bg-gray-800">
 
               <label class="block text-gray-500 font-bold flex items-center mb-4">
@@ -25,10 +29,7 @@
               <div>
                 <span class="text-gray-500 font-bold mb-4">Filter by rewards</span>
 
-                <div v-if="rewards.loading">
-                  Loading Rewards...
-                </div>
-                <div v-if="!rewards.loading && rewards.response" class="flex items-center flex-wrap mt-4">
+                <div v-if="rewards.response" class="flex items-center flex-wrap mt-4">
                   <div v-for="reward in rewards.response.rewards" :class="hasFilter(reward, 'rewards') ? '' : 'opacity-50'"
                        class="mb-3 mr-2 cursor-pointer "
                        v-tooltip="reward.title"
@@ -41,10 +42,7 @@
               <div class="mt-4">
                 <span class="text-gray-500 font-bold mb-4">Filter by mission</span>
 
-                <div v-if="rewards.loading">
-                  Loading Rewards...
-                </div>
-                <div v-if="!rewards.loading && rewards.response" class="flex items-center flex-wrap mt-4">
+                <div v-if="rewards.response" class="flex items-center flex-wrap mt-4">
                   <div v-for="reward in rewards.response.missions" :class="hasFilter(reward, 'missions') ? '' : 'opacity-50'"
                        class="mb-3 mr-2 cursor-pointer"
                        v-tooltip="reward.title"
@@ -56,63 +54,62 @@
               </div>
 
             </div>
+
           </div>
+
         </div>
-        <div class="w-3/4">
 
-          <div v-if="loading">
-            Loading Missions...
-          </div>
+        <div class="w-3/4 p-4">
 
-          <div v-if="!loading && missions" class="p-4">
+          <div v-if="missions" class="w-full">
+            <transition-group name="fade">
+              <div v-for="mission in missions" :key="mission.id" class="bg-gray-800 mb-4 p-4 shadow flex items-center">
+                <div class="w-2/5 flex items-center border-r pr-4 border-gray-700">
+                  <h1 class="font-bold mr-3">⚡ {{mission.level ? mission.level : '..'}}</h1>
+                  <img :src="`/icons/missions/${mission.type}.png`" class="mr-4" alt="" width="28px">
+                  <strong>{{mission.title}}</strong>
+                </div>
+                <div class="w-1/5 pl-4">
+                  <strong class="text-gray-600">Rewards:</strong>
+                  <div class="flex items-center">
+                    <div v-for="reward in getRewardsType(mission, 'rewards')" class="flex items-center mr-2" v-tooltip="reward.title">
+                      <template v-if="reward.quantity > 100">
+                        {{reward.quantity | number}} <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2 mr-2" alt=""
+                                                          width="28px">
+                      </template>
+                      <template v-else-if="reward.quantity > 1 && reward.quantity < 5">
+                        {{reward.quantity}}x <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2 mr-2" alt=""
+                                                  width="28px">
+                      </template>
+                      <template v-else><img :src="`/icons/rewards/${reward.slug}.png`" class="" alt="" width="28px"></template>
 
-            <div v-for="mission in missions" class="bg-gray-800 mb-4 p-4 shadow flex items-center">
-              <div class="w-2/5 flex items-center border-r pr-4 border-gray-700">
-                <h1 class="font-bold mr-3">⚡ {{mission.level ? mission.level : '..'}}</h1>
-                <img :src="`/icons/missions/${mission.type}.png`" class="mr-4" alt="" width="28px">
-                <strong>{{mission.title}}</strong>
-              </div>
-              <div class="w-1/5 pl-4">
-                <strong class="text-gray-600">Rewards:</strong>
-                <div class="flex items-center">
-                  <div v-for="reward in getRewardsType(mission, 'rewards')" class="flex items-center mr-2" v-tooltip="reward.title">
-                    <template v-if="reward.quantity > 100">
-                      {{reward.quantity | number}} <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2 mr-2" alt=""
-                                                        width="28px">
-                    </template>
-                    <template v-else-if="reward.quantity > 1 && reward.quantity < 5">
-                      {{reward.quantity}}x <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2 mr-2" alt=""
-                                                width="28px">
-                    </template>
-                    <template v-else><img :src="`/icons/rewards/${reward.slug}.png`" class="" alt="" width="28px"></template>
-
+                    </div>
+                  </div>
+                </div>
+                <div class="w-1/5 pl-4">
+                  <strong class="text-gray-600">Alert Rewards:</strong>
+                  <div class="flex items-center" v-if="getRewardsType(mission, 'alerts').length">
+                    <div v-for="reward in getRewardsType(mission, 'alerts')" class="flex items-center mr-4" v-tooltip="reward.title">
+                      {{reward.quantity | number}} <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2 mr-4" alt="" width="28px">
+                    </div>
+                  </div>
+                  <div v-else>
+                    None...
+                  </div>
+                </div>
+                <div class="w-1/5 pl-4">
+                  <div class="flex items-center flex-wrap" v-if="mission.modifiers.length">
+                    <div v-for="modifier in mission.modifiers" class="flex items-center mb-1 mr-1"
+                         v-tooltip="`<strong>${modifier.title}</strong> <br>${modifier.description}`">
+                      <img :src="modifier.image" class="" alt="" style="height: 30px; min-width: 30px;">
+                    </div>
+                  </div>
+                  <div v-else>
+                    None...
                   </div>
                 </div>
               </div>
-              <div class="w-1/5 pl-4">
-                <strong class="text-gray-600">Alert Rewards:</strong>
-                <div class="flex items-center" v-if="getRewardsType(mission, 'alerts').length">
-                  <div v-for="reward in getRewardsType(mission, 'alerts')" class="flex items-center mr-4" v-tooltip="reward.title">
-                    {{reward.quantity | number}} <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2 mr-4" alt="" width="28px">
-                  </div>
-                </div>
-                <div v-else>
-                  None...
-                </div>
-              </div>
-              <div class="w-1/5 pl-4">
-                <div class="flex items-center flex-wrap" v-if="mission.modifiers.length">
-                  <div v-for="modifier in mission.modifiers" class="flex items-center mb-1 mr-1"
-                       v-tooltip="`<strong>${modifier.title}</strong> <br>${modifier.description}`">
-                    <img :src="modifier.image" class="" alt="" style="height: 30px; min-width: 30px;">
-                  </div>
-                </div>
-                <div v-else>
-                  None...
-                </div>
-              </div>
-            </div>
-
+            </transition-group>
           </div>
 
         </div>
@@ -255,5 +252,12 @@
 </script>
 
 <style scoped lang="scss">
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .15s;
+  }
 
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+  {
+    opacity: 0;
+  }
 </style>
