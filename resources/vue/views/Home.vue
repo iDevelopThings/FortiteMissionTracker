@@ -91,7 +91,13 @@
                 <strong class="text-gray-600">Rewards:</strong>
                 <div class="flex items-center">
                   <div v-for="reward in getRewardsType(mission, 'rewards')" class="flex items-center mr-2" v-tooltip="reward.title">
-                    <template v-if="reward.quantity > 1">{{reward.quantity}}x <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2" alt="" width="28px">
+                    <template v-if="reward.quantity > 100">
+                      {{reward.quantity | number}} <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2 mr-2" alt=""
+                                                        width="28px">
+                    </template>
+                    <template v-else-if="reward.quantity > 1 && reward.quantity < 5">
+                      {{reward.quantity}}x <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2 mr-2" alt=""
+                                                width="28px">
                     </template>
                     <template v-else><img :src="`/icons/rewards/${reward.slug}.png`" class="" alt="" width="28px"></template>
 
@@ -101,8 +107,8 @@
               <div class="w-1/5 pl-4">
                 <strong class="text-gray-600">Alert Rewards:</strong>
                 <div class="flex items-center" v-if="getRewardsType(mission, 'alerts').length">
-                  <div v-for="reward in getRewardsType(mission, 'alerts')" class="flex items-center mr-2" v-tooltip="reward.title">
-                    {{reward.quantity}}x <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2" alt="" width="28px">
+                  <div v-for="reward in getRewardsType(mission, 'alerts')" class="flex items-center mr-4" v-tooltip="reward.title">
+                    {{reward.quantity | number}} <img :src="`/icons/rewards/${reward.slug}.png`" class="ml-2 mr-4" alt="" width="28px">
                   </div>
                 </div>
                 <div v-else>

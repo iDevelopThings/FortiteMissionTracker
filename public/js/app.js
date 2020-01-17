@@ -1195,6 +1195,19 @@ Vue.use(VueRouter);
 window.axios = __webpack_require__(26);
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+Vue.filter('number', function (num) {
+  num = parseInt(num);
+  var si = [{ value: 1, symbol: "" }, { value: 1E3, symbol: "k" }, { value: 1E6, symbol: "M" }, { value: 1E9, symbol: "G" }, { value: 1E12, symbol: "T" }, { value: 1E15, symbol: "P" }, { value: 1E18, symbol: "E" }];
+  var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+  var i;
+  for (i = si.length - 1; i > 0; i--) {
+    if (num >= si[i].value) {
+      break;
+    }
+  }
+  return (num / si[i].value).toFixed(2).replace(rx, "$1") + si[i].symbol;
+});
+
 var router = new VueRouter({
   //mode   : 'history',
   routes: [{
@@ -25918,6 +25931,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Home",
@@ -26502,11 +26521,36 @@ var render = function() {
                                   staticClass: "flex items-center mr-2"
                                 },
                                 [
-                                  reward.quantity > 1
+                                  reward.quantity > 100
                                     ? [
-                                        _vm._v(_vm._s(reward.quantity) + "x "),
+                                        _vm._v(
+                                          "\n                    " +
+                                            _vm._s(
+                                              _vm._f("number")(reward.quantity)
+                                            ) +
+                                            " "
+                                        ),
                                         _c("img", {
-                                          staticClass: "ml-2",
+                                          staticClass: "ml-2 mr-2",
+                                          attrs: {
+                                            src:
+                                              "/icons/rewards/" +
+                                              reward.slug +
+                                              ".png",
+                                            alt: "",
+                                            width: "28px"
+                                          }
+                                        })
+                                      ]
+                                    : reward.quantity > 1 && reward.quantity < 5
+                                    ? [
+                                        _vm._v(
+                                          "\n                    " +
+                                            _vm._s(reward.quantity) +
+                                            "x "
+                                        ),
+                                        _c("img", {
+                                          staticClass: "ml-2 mr-2",
                                           attrs: {
                                             src:
                                               "/icons/rewards/" +
@@ -26561,16 +26605,18 @@ var render = function() {
                                           expression: "reward.title"
                                         }
                                       ],
-                                      staticClass: "flex items-center mr-2"
+                                      staticClass: "flex items-center mr-4"
                                     },
                                     [
                                       _vm._v(
                                         "\n                  " +
-                                          _vm._s(reward.quantity) +
-                                          "x "
+                                          _vm._s(
+                                            _vm._f("number")(reward.quantity)
+                                          ) +
+                                          " "
                                       ),
                                       _c("img", {
-                                        staticClass: "ml-2",
+                                        staticClass: "ml-2 mr-4",
                                         attrs: {
                                           src:
                                             "/icons/rewards/" +
