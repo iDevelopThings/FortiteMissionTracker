@@ -29,21 +29,13 @@
                   Loading Rewards...
                 </div>
                 <div v-if="!rewards.loading && rewards.response" class="flex items-center flex-wrap mt-4">
-                  <div v-for="reward in rewards.response.rewards" v-if="!hasFilter(reward, 'rewards')" class="mb-3 mr-2 cursor-pointer hover:opacity-50"
+                  <div v-for="reward in rewards.response.rewards" :class="hasFilter(reward, 'rewards') ? '' : 'opacity-50'"
+                       class="mb-3 mr-2 cursor-pointer "
                        v-tooltip="reward.title"
-                       @click="addFilter(reward, 'rewards')">
+                       @click="hasFilter(reward, 'rewards') ? removeFilter(reward, 'rewards') : addFilter(reward, 'rewards')">
                     <img :src="`/icons/rewards/${reward.type}.png`" width="35px">
                   </div>
                 </div>
-
-                <span class="text-gray-500 font-bold mb-4">Current Filters:</span>
-                <div v-if="filters.rewards.length" class="flex items-center flex-wrap mt-4">
-                  <div v-for="reward in filters.rewards" class="mb-3 mr-2 cursor-pointer hover:opacity-50" v-tooltip="reward.title"
-                       @click="removeFilter(reward, 'rewards')">
-                    <img :src="`/icons/rewards/${reward.type}.png`" width="35px">
-                  </div>
-                </div>
-                <div v-else><span class="text-sm text-gray-500  mb-4">No reward filters selected...</span></div>
               </div>
 
               <div class="mt-4">
@@ -53,21 +45,14 @@
                   Loading Rewards...
                 </div>
                 <div v-if="!rewards.loading && rewards.response" class="flex items-center flex-wrap mt-4">
-                  <div v-for="reward in rewards.response.missions" v-if="!hasFilter(reward, 'missions')" class="mb-3 mr-2 cursor-pointer hover:opacity-50"
+                  <div v-for="reward in rewards.response.missions" :class="hasFilter(reward, 'missions') ? '' : 'opacity-50'"
+                       class="mb-3 mr-2 cursor-pointer"
                        v-tooltip="reward.title"
-                       @click="addFilter(reward, 'missions')">
+                       @click="hasFilter(reward, 'missions') ? removeFilter(reward, 'missions') : addFilter(reward, 'missions')">
                     <img :src="`/icons/missions/${reward.type}.png`" width="28px">
                   </div>
                 </div>
 
-                <span class="text-gray-500 font-bold mb-4">Current Filters:</span>
-                <div v-if="filters.missions.length" class="flex items-center flex-wrap mt-4">
-                  <div v-for="reward in filters.missions" class="mb-3 mr-2 cursor-pointer hover:opacity-50" v-tooltip="reward.title"
-                       @click="removeFilter(reward, 'missions')">
-                    <img :src="`/icons/missions/${reward.type}.png`" width="28px">
-                  </div>
-                </div>
-                <div v-else><span class="text-sm text-gray-500  mb-4">No map filters selected...</span></div>
               </div>
 
             </div>
