@@ -43,7 +43,6 @@ class FortniteController {
       fortniteManager.setToken(fortniteToken);
     } else {
       let token = await fortniteManager.login();
-      await Cache.put('fortniteToken', token, 60);
     }
 
     let missions = await fortniteManager.getLatestMissions();
@@ -59,7 +58,6 @@ class FortniteController {
 
       await fortniteManager.updateSavedMissions();
     } catch (e) {
-      console.error(e);
       return response.status(500).json(e);
     }
 

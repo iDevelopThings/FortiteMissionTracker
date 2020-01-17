@@ -26,6 +26,25 @@ class FortniteManager {
     this.token = token;
   }
 
+  async fixToken()
+  {
+    try {
+      axios.defaults.headers.common['Authorization'] = `bearer ${this.token}`;
+      let response                                   = await axios.get('https://fortnite-public-service-prod11.ol.epicgames.com/fortnite/api/game/v2/world/info');
+      console.log('TOKEN IS FINE I THINK...');
+      return response.data;
+    } catch (e) {
+
+      if (e.response && e.response.status === 401) {
+        await Cache.forget('fortniteToken');
+        console.log('CACHED FORTNITE TOKEN WAS CLEARED.');
+        await this.login();
+        console.log('TOKEN WAS UPDATED, NO ERRORS WOOP');
+      } else
+        throw e;
+    }
+  }
+
   login()
   {
     return new Promise((resolve, reject) => {
@@ -58,6 +77,7 @@ class FortniteManager {
         const stw      = await fortnite.runSubGame(ESubGame.SaveTheWorld);
 
         this.token = stw.fn.auth.accessToken;
+        await Cache.put('fortniteToken', this.token, 60);
         resolve(stw.fn.auth.accessToken);
       });
     });
@@ -255,9 +275,9 @@ class FortniteManager {
       const fortniteToken = await Cache.get('fortniteToken');
       if (fortniteToken) {
         this.setToken(fortniteToken);
+        await this.fixToken();
       } else {
-        let token = await this.login();
-        await Cache.put('fortniteToken', token, 60);
+        await this.login();
       }
 
       let missions = await this.getLatestMissions();
