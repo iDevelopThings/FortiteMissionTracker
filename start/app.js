@@ -54,7 +54,7 @@ const aceProviders = [
  */
 const aliases = {
   Scheduler : 'Adonis/Addons/Scheduler',
-  Cache : 'Adonis/Addons/Cache',
+  Cache     : 'Adonis/Addons/Cache',
 };
 
 /*
@@ -65,6 +65,8 @@ const aliases = {
  | Here you store ace commands for your package
  |
  */
-const commands = [];
+const commands = [
+  'App/Commands/UpdateMission',
+];
 
 module.exports = {providers, aceProviders, aliases, commands};
