@@ -22,7 +22,7 @@
               <label class="block text-gray-500 font-bold flex items-center mb-4">
                 <input class="mr-2 leading-tight" type="checkbox" v-model="filters.specialRewards">
                 <span class="text-sm" v-tooltip="'Show missions with the rewards, perkup, evo mats etc'">
-                  Special Rewards
+                  Special rewards
                 </span>
               </label>
 
@@ -108,6 +108,10 @@
                     None...
                   </div>
                 </div>
+              </div>
+              <div v-if="missions.length === 0" key="no-missions" class="bg-gray-800 mb-4 p-4 shadow text-center">
+                <h1 class="text-2xl">There are no missions to show...</h1>
+                <p class="text-gray-400">Adjust your search to fix this</p>
               </div>
             </transition-group>
           </div>
@@ -253,7 +257,7 @@
 
 <style scoped lang="scss">
   .fade-enter-active, .fade-leave-active {
-    transition: opacity .15s;
+    transition: opacity .25s;
   }
 
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
