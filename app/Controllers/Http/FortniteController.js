@@ -19,7 +19,7 @@ class FortniteController {
 
     conversions.missions = collect(Conversions.missions)
       .filter(mission => {
-        return mission.type !== 'msk';
+        return mission.type !== 'msk' && mission.type !== 'skipped';
       })
       .map(mission => {
         let m = mission;
@@ -30,7 +30,8 @@ class FortniteController {
     conversions.rewards = collect(Conversions.rewards)
       .filter(reward => {
         return reward.item_reward === undefined && reward.npc === undefined;
-      }).toArray();
+      })
+      .toArray();
 
     return response.json(conversions);
 
