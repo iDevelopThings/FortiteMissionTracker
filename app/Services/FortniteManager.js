@@ -91,6 +91,9 @@ class FortniteManager {
 
           Object.values(Conversions.missions)
             .forEach(m => {
+              if (m.maps === undefined) {
+                console.log('errored part', mission, m);
+              }
               if (m.maps.includes(mission.missionGenerator)) {
                 mission.map = m;
               }
