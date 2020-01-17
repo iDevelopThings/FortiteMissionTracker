@@ -72,6 +72,14 @@ class FortniteController {
 
   async missions({request, response})
   {
+    let key = request.originalUrl();
+
+    let missionCache = await Cache.has(key);
+
+    if (missionCache) {
+      return response.json(await Cache.get(key));
+    }
+
     let missions = await Mission.query()
       .with('rewards')
       .with('modifiers')
@@ -117,6 +125,8 @@ class FortniteController {
       });
 
     });
+
+    await Cache.put(key, missions, 60);
 
     return response.json(missions);
   }
