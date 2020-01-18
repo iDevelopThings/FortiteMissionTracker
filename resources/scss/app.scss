@@ -15,6 +15,21 @@ html, body, #app {
   color: white;
 }
 
+.discord-button {
+  background-color: #7289da;
+  color: #fff;
+  font-size: 16px;
+  line-height: 24px;
+  border-radius: 3px;
+  font-weight: 500;
+  padding: 6px 16px;
+  display: block;
+
+  &:hover, &:focus {
+    background-color: #677bc4;
+  }
+}
+
 .tooltip {
   display: block !important;
   z-index: 10000;

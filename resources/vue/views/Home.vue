@@ -5,7 +5,7 @@
 
       <div class="w-1/4 p-4">
 
-        <div class="bg-gray-800 rounded shadow w-full">
+        <div class="bg-gray-800 rounded shadow w-full mb-3">
 
           <div class="p-4 bg-gray-700">
             <h4 class="font-bold">Filter Missions</h4>
@@ -57,6 +57,14 @@
 
         </div>
 
+        <div class=" p-4 bg-gray-800 rounded shadow w-full text-center">
+          <h3 class="text-lg font-bold">Join our discord</h3>
+          <p class="text-sm text-gray-500 mb-4">You can setup mission alerts with our bot, view mission alerts in discord and more.</p>
+
+          <a href="https://discord.gg/KqfAAJj" target="_blank" class="discord-button">
+            Continue to Discord
+          </a>
+        </div>
       </div>
 
       <div class="w-3/4 p-4 overflow-y-scroll">
@@ -134,7 +142,7 @@
     data()
     {
       return {
-        ready   : false,
+        ready : false,
 
         rewards : {
           loading  : false,
