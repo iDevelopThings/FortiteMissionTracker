@@ -19,8 +19,8 @@ class UpdateMission extends Command {
   {
     try {
       let fortniteManager = new FortniteManager();
-      await Cache.flush();
       await fortniteManager.updateSavedMissions();
+      await Cache.flush();
     } catch (e) {
       throw e;
     }
