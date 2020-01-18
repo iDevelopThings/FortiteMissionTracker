@@ -2,6 +2,7 @@
 
 const FortniteManager = use('App/Services/FortniteManager');
 const {Command}       = require('@adonisjs/ace');
+const Cache           = use('Cache');
 
 class UpdateMission extends Command {
   static get signature()
@@ -18,7 +19,7 @@ class UpdateMission extends Command {
   {
     try {
       let fortniteManager = new FortniteManager();
-
+      await Cache.clear();
       await fortniteManager.updateSavedMissions();
     } catch (e) {
       throw e;
