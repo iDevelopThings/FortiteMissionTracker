@@ -61,9 +61,9 @@
 		data()
 		{
 			return {
-				email           : "sam@equalmediatv.net",
-				password        : "sam123",
-				passwordConfirm : "sam123",
+				email           : "",
+				password        : "",
+				passwordConfirm : "",
 
 				error : null,
 

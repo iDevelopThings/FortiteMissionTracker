@@ -46,8 +46,8 @@
 		{
 			return {
 
-				email    : "sam@equalmediatv.net",
-				password : "sam123",
+				email    : "",
+				password : "",
 
 				submitting : false,
 
