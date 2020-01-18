@@ -30,6 +30,20 @@ html, body, #app {
   }
 }
 
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
+  opacity: 0;
+}
+
+.background-fade-enter-active, .background-fade-leave-active {
+  transition: opacity .15s ease-in-out;
+}
+
+.background-fade-enter, .background-fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
+  opacity: 0;
+}
+
 .tooltip {
   display: block !important;
   z-index: 10000;

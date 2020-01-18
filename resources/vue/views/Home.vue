@@ -1,9 +1,9 @@
 <template>
   <div class="h-full flex justify-center">
 
-    <div class="flex h-full w-full">
+    <div class="flex h-full w-full flex-col lg:flex-row overflow-y-scroll lg:overflow-y-hidden">
 
-      <div class="w-1/4 p-4">
+      <div class="lg:w-1/4 p-4">
 
         <div class="bg-gray-800 rounded shadow w-full mb-3">
 
@@ -67,10 +67,10 @@
         </div>
       </div>
 
-      <div class="w-3/4 p-4 overflow-y-scroll">
+      <div class="lg:w-3/4 pt-4 lg:overflow-y-scroll">
 
         <div v-if="missions" class="w-full">
-          <transition-group name="fade">
+          <transition-group name="fade" mode="out-in" appear>
             <div v-for="mission in missions" :key="mission.id" class="bg-gray-800 mb-4 p-4 shadow flex items-center">
               <div class="w-2/5 flex items-center border-r pr-4 border-gray-700">
                 <h1 class="font-bold mr-3">⚡ {{mission.level ? mission.level : '..'}}</h1>
@@ -266,12 +266,5 @@
 </script>
 
 <style scoped lang="scss">
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .25s;
-  }
 
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
-  {
-    opacity: 0;
-  }
 </style>
