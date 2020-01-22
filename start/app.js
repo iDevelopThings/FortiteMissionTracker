@@ -1,5 +1,5 @@
 'use strict';
-
+const path = require('path');
 /*
  |--------------------------------------------------------------------------
  | Providers
@@ -11,17 +11,18 @@
  |
  */
 const providers = [
-  '@adonisjs/framework/providers/AppProvider',
-  '@adonisjs/framework/providers/ViewProvider',
-  '@adonisjs/lucid/providers/LucidProvider',
-  '@adonisjs/bodyparser/providers/BodyParserProvider',
-  '@adonisjs/cors/providers/CorsProvider',
-  '@adonisjs/shield/providers/ShieldProvider',
-  '@adonisjs/session/providers/SessionProvider',
-  '@adonisjs/auth/providers/AuthProvider',
-  'adonis-scheduler/providers/SchedulerProvider',
-  '@adonisjs/redis/providers/RedisProvider',
-  'adonis-cache/providers/CacheProvider',
+	'@adonisjs/framework/providers/AppProvider',
+	'@adonisjs/framework/providers/ViewProvider',
+	'@adonisjs/lucid/providers/LucidProvider',
+	'@adonisjs/bodyparser/providers/BodyParserProvider',
+	'@adonisjs/cors/providers/CorsProvider',
+	'@adonisjs/shield/providers/ShieldProvider',
+	'@adonisjs/session/providers/SessionProvider',
+	'@adonisjs/auth/providers/AuthProvider',
+	'adonis-scheduler/providers/SchedulerProvider',
+	'@adonisjs/redis/providers/RedisProvider',
+	'adonis-cache/providers/CacheProvider',
+	path.join(__dirname, '..', 'providers', 'DiscordBotProvider'),
 ];
 
 /*
@@ -34,9 +35,9 @@ const providers = [
  |
  */
 const aceProviders = [
-  '@adonisjs/lucid/providers/MigrationsProvider',
-  'adonis-scheduler/providers/CommandsProvider',
-  'adonis-cache/providers/CommandsProvider',
+	'@adonisjs/lucid/providers/MigrationsProvider',
+	'adonis-scheduler/providers/CommandsProvider',
+	'adonis-cache/providers/CommandsProvider',
 
 ];
 
@@ -53,8 +54,8 @@ const aceProviders = [
  |
  */
 const aliases = {
-  Scheduler : 'Adonis/Addons/Scheduler',
-  Cache     : 'Adonis/Addons/Cache',
+	Scheduler : 'Adonis/Addons/Scheduler',
+	Cache     : 'Adonis/Addons/Cache',
 };
 
 /*
@@ -66,7 +67,7 @@ const aliases = {
  |
  */
 const commands = [
-  'App/Commands/UpdateMission',
+	'App/Commands/UpdateMission',
 ];
 
 module.exports = {providers, aceProviders, aliases, commands};

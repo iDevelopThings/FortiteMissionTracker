@@ -9,6 +9,7 @@ const Cache           = use('Cache');
 const Mission         = use('App/Models/Mission');
 const MissionReward   = use('App/Models/MissionReward');
 const MissionModifier = use('App/Models/MissionModifier');
+const bot             = use('Discord');
 
 class FortniteManager {
 
@@ -20,6 +21,8 @@ class FortniteManager {
 		});
 
 		this.token = null;
+
+		this.discordbotChecker = null;
 	}
 
 	setToken(token)
@@ -380,6 +383,82 @@ class FortniteManager {
 		} catch (e) {
 			throw e;
 		}
+	}
+
+	async broadcastToDiscord()
+	{
+		await bot.awaitReadyState();
+
+		let evoMatsMissions = await Mission.query()
+			.with('rewards')
+			.whereHas('rewards', builder => {
+				builder.whereIn('slug', ['lib', 'pdor', 'eots', 'ss'])
+					.where('alert_reward', 0)
+					.where('quantity', '>', 1);
+			})
+			.orderBy('level', 'desc')
+			.fetch();
+		evoMatsMissions     = evoMatsMissions.toJSON();
+
+		let perkupMissions = await Mission.query()
+			.with('rewards')
+			.whereHas('rewards', builder => {
+				builder.whereIn('slug', ['epu', 'lpu', 'rpu', 'upu'])
+					.where('alert_reward', 0)
+					.where('quantity', '>', 1);
+			})
+			.orderBy('level', 'desc')
+			.fetch();
+		perkupMissions     = perkupMissions.toJSON();
+
+		let rtdMissions = await Mission.query()
+			.with('rewards')
+			.where('type', 'rtd')
+			.orderBy('level', 'desc')
+			.fetch();
+		rtdMissions     = rtdMissions.toJSON();
+
+		let missionsText = `**All Decent Twine Missions for the next 24HR.** \n\n**4X Missions:**\n---------------\n`;
+
+		missionsText = this.constructMissionRewardsString(evoMatsMissions, missionsText);
+		missionsText += `\n\n**Perkup Missions:**\n---------------\n`;
+		missionsText = this.constructMissionRewardsString(perkupMissions, missionsText);
+		missionsText += `\n\n**RTD Missions:**\n---------------\n`;
+		missionsText = this.constructMissionRewardsString(rtdMissions, missionsText);
+
+		let channel = bot.guild.channels.find(c => c.name === 'mission-alerts');
+
+		await channel.send(missionsText, {split : true});
+	}
+
+	constructMissionRewardsString(missions, missionsText)
+	{
+		for (let i = 0; i < missions.length; i++) {
+			let m = missions[i];
+
+			let missionEmoji = bot.guild.emojis.find(e => e.name === m.type);
+
+			let rewards = m.rewards
+				.filter(r => r.alert_reward === 0)
+				.map(r => {
+					let emoji = bot.guild.emojis.find(e => e.name === r.slug);
+					return `${r.quantity > 1 ? `${r.quantity}x` : ''}${emoji}`;
+				})
+				.join(' ');
+
+			let alertRewards = m.rewards
+				.filter(r => r.alert_reward === 1)
+				.map(r => {
+					let emoji = bot.guild.emojis.find(e => e.name === r.slug);
+					if (!emoji)
+						console.log('Emoji not found', r);
+					return emoji ? `${emoji}` : '';
+				})
+				.join(' ');
+
+			missionsText = `${missionsText}${missionEmoji} **${m.title}** - ⚡${m.level}\n${rewards}${alertRewards ? alertRewards : ''}\n\n`;
+		}
+		return missionsText;
 	}
 
 }

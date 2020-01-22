@@ -23,7 +23,6 @@ Route.get('/auth/tokens', 'AuthController.tokens').middleware('auth');
 Route.post('/auth/tokens', 'AuthController.generateToken').middleware('auth');
 Route.delete('/auth/tokens/:id', 'AuthController.deleteToken').middleware('auth');
 
-//Route.on('/').view('welcome');
 Route.get('/store', 'FortniteController.store');
 Route.get('/rewards', 'FortniteController.rewards');
 
