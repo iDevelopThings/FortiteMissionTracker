@@ -56,17 +56,11 @@ class FortniteController {
 
 	async store({request, response})
 	{
-		try {
-			let fortniteManager = new FortniteManager();
+		let fortniteManager = new FortniteManager();
 
-			await fortniteManager.updateSavedMissions();
-		} catch (e) {
-			if (!Object.keys(e).length)
-				throw e;
-
-			return response.status(500).json({error : e, t : Object.keys(e).length ? 'r' : 'y', m : e.toString()});
-		}
-
+		await fortniteManager.updateSavedMissions();
+		await Cache.flush();
+		await fortniteManager.broadcastToDiscord();
 		console.log('Successfully updated missions.');
 		return response.json({message : 'Done'});
 	}
