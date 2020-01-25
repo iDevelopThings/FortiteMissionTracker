@@ -304,7 +304,7 @@ class FortniteManager {
 			}
 
 			let missions = await this.getLatestMissions();
-
+			
 			for (let i = 0; i < missions.length; i++) {
 
 				let mission = missions[i];

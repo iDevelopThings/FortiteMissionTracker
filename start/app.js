@@ -22,6 +22,7 @@ const providers = [
 	'adonis-scheduler/providers/SchedulerProvider',
 	'@adonisjs/redis/providers/RedisProvider',
 	'adonis-cache/providers/CacheProvider',
+	'adonisjs-bugsnag/providers/BugSnagProvider',
 	path.join(__dirname, '..', 'providers', 'DiscordBotProvider'),
 ];
 

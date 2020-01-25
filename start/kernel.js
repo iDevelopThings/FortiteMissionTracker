@@ -40,6 +40,8 @@ const globalMiddleware = [
 	'Adonis/Middleware/Shield',
 	'Adonis/Middleware/AuthInit',
 	'App/Middleware/ConvertEmptyStringsToNull',
+	'Adonis/Middleware/BugSnagUser',
+
 ];
 
 /*

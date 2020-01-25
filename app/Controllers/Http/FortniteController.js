@@ -13,156 +13,156 @@ const Helpers       = use('Helpers');
 
 class FortniteController {
 
-  async rewards({request, response})
-  {
-    let conversions = Conversions;
+	async rewards({request, response})
+	{
+		let conversions = Conversions;
 
-    conversions.missions = collect(Conversions.missions)
-      .filter(mission => {
-        return mission.type !== 'msk' && mission.type !== 'skipped';
-      })
-      .map(mission => {
-        let m = mission;
-        delete m.maps;
-        return m;
-      }).toArray();
+		conversions.missions = collect(Conversions.missions)
+			.filter(mission => {
+				return mission.type !== 'msk' && mission.type !== 'skipped';
+			})
+			.map(mission => {
+				let m = mission;
+				delete m.maps;
+				return m;
+			}).toArray();
 
-    conversions.rewards = collect(Conversions.rewards)
-      .filter(reward => {
-        return reward.item_reward === undefined && reward.npc === undefined;
-      })
-      .toArray();
+		conversions.rewards = collect(Conversions.rewards)
+			.filter(reward => {
+				return reward.item_reward === undefined && reward.npc === undefined;
+			})
+			.toArray();
 
-    return response.json(conversions);
+		return response.json(conversions);
 
-  }
+	}
 
-  async view({request, response})
-  {
-    let fortniteManager = new FortniteManager();
+	async view({request, response})
+	{
+		let fortniteManager = new FortniteManager();
 
-    const fortniteToken = await Cache.get('fortniteToken');
-    if (fortniteToken) {
-      fortniteManager.setToken(fortniteToken);
-    } else {
-      let token = await fortniteManager.login();
-    }
+		const fortniteToken = await Cache.get('fortniteToken');
+		if (fortniteToken) {
+			fortniteManager.setToken(fortniteToken);
+		} else {
+			let token = await fortniteManager.login();
+		}
 
-    let missions = await fortniteManager.getLatestMissions();
+		let missions = await fortniteManager.getLatestMissions();
 
-    return response.json(missions);
+		return response.json(missions);
 
-  }
+	}
 
-  async store({request, response})
-  {
-    try {
-      let fortniteManager = new FortniteManager();
+	async store({request, response})
+	{
+		try {
+			let fortniteManager = new FortniteManager();
 
-      await fortniteManager.updateSavedMissions();
-    } catch (e) {
-      if (!Object.keys(e).length)
-        throw e;
+			await fortniteManager.updateSavedMissions();
+		} catch (e) {
+			if (!Object.keys(e).length)
+				throw e;
 
-      return response.status(500).json({error : e, t : Object.keys(e).length ? 'r' : 'y', m : e.toString()});
-    }
+			return response.status(500).json({error : e, t : Object.keys(e).length ? 'r' : 'y', m : e.toString()});
+		}
 
-    console.log('Successfully updated missions.');
-    return response.json({message : 'Done'});
-  }
+		console.log('Successfully updated missions.');
+		return response.json({message : 'Done'});
+	}
 
-  async missions({request, response})
-  {
-    let key = request.originalUrl();
+	async missions({request, response})
+	{
+		let key = request.originalUrl();
 
-    let missionCache = await Cache.has(key);
+		let missionCache = await Cache.has(key);
 
-    if (missionCache) {
-      return response.json(await Cache.get(key));
-    }
+		if (missionCache) {
+			return response.json(await Cache.get(key));
+		}
 
-    let missions = await Mission.query()
-      .with('rewards')
-      .with('modifiers')
-      .where(builder => {
+		let missions = await Mission.query()
+			.with('rewards')
+			.with('modifiers')
+			.where(builder => {
 
-        if (request.input('maps')) {
-          let maps = request.input('maps').split(',');
-          builder.whereIn('type', maps);
-        }
+				if (request.input('maps')) {
+					let maps = request.input('maps').split(',');
+					builder.whereIn('type', maps);
+				}
 
-        if (request.input('double_rewards')) {
-          builder.whereHas('rewards', query => {
-            return query.where('alert_reward', 0).where('quantity', '>', 1);
-          });
-        }
+				if (request.input('double_rewards')) {
+					builder.whereHas('rewards', query => {
+						return query.where('alert_reward', 0).where('quantity', '>', 1);
+					});
+				}
 
-        if (request.input('special_rewards')) {
-          builder.where('is_special', 1);
-        }
-        if (request.input('rewards')) {
-          builder
-            .whereHas('rewards', query => {
-              let rewards = request.input('rewards').split(',');
-              query.whereIn('slug', rewards);
-            });
-        }
-      })
-      .orderBy('level', 'asc')
-      .fetch();
+				if (request.input('special_rewards')) {
+					builder.where('is_special', 1);
+				}
+				if (request.input('rewards')) {
+					builder
+						.whereHas('rewards', query => {
+							let rewards = request.input('rewards').split(',');
+							query.whereIn('slug', rewards);
+						});
+				}
+			})
+			.orderBy('level', 'asc')
+			.fetch();
 
-    missions = missions.toJSON();
+		missions = missions.toJSON();
 
-    missions.forEach(mission => {
+		missions.forEach(mission => {
 
-      let modifiers = mission.modifiers;
+			let modifiers = mission.modifiers;
 
-      modifiers.forEach(modifier => {
-        if (modifier.slug === 'na') {
-          console.log('NOT HANDLED.', `PL: ${mission.level} ${mission.title}`, modifier.type);
-        } else if (!fs.existsSync(Helpers.publicPath(`icons/modifiers/${modifier.slug}.png`))) {
-          console.log('IMAGE DOESNT EXIST', `PL: ${mission.level} ${mission.title}`, Helpers.publicPath(`icons/modifiers/${modifier.slug}.png`));
-        }
-      });
+			modifiers.forEach(modifier => {
+				if (modifier.slug === 'na') {
+					console.log('NOT HANDLED.', `PL: ${mission.level} ${mission.title}`, modifier.type);
+				} else if (!fs.existsSync(Helpers.publicPath(`icons/modifiers/${modifier.slug}.png`))) {
+					console.log('IMAGE DOESNT EXIST', `PL: ${mission.level} ${mission.title}`, Helpers.publicPath(`icons/modifiers/${modifier.slug}.png`));
+				}
+			});
 
-    });
+		});
 
-    await Cache.put(key, missions, 60);
+		await Cache.put(key, missions, 60);
 
-    return response.json(missions);
-  }
+		return response.json(missions);
+	}
 
-  async missionsByType({request, response, params})
-  {
-    if (!params.type) {
-      return response.status(500).json({message : 'Please specify a type of mission.'});
-    }
+	async missionsByType({request, response, params})
+	{
+		if (!params.type) {
+			return response.status(500).json({message : 'Please specify a type of mission.'});
+		}
 
-    let missions = await Mission.query()
-      .orderBy('tile_index', 'asc')
-      .where('type', params.type)
-      .with('rewards')
-      .fetch();
+		let missions = await Mission.query()
+			.orderBy('tile_index', 'asc')
+			.where('type', params.type)
+			.with('rewards')
+			.fetch();
 
-    return response.json(missions);
-  }
+		return response.json(missions);
+	}
 
-  async missionsContainingReward({request, response, params})
-  {
-    if (!params.type) {
-      return response.status(500).json({message : 'Please specify a type of reward.'});
-    }
+	async missionsContainingReward({request, response, params})
+	{
+		if (!params.type) {
+			return response.status(500).json({message : 'Please specify a type of reward.'});
+		}
 
-    let missions = await Mission.query()
-      .orderBy('tile_index', 'asc')
-      .with('rewards')
-      .whereHas('rewards', query => {
-        query.where('slug', params.type);
-      })
-      .fetch();
+		let missions = await Mission.query()
+			.orderBy('tile_index', 'asc')
+			.with('rewards')
+			.whereHas('rewards', query => {
+				query.where('slug', params.type);
+			})
+			.fetch();
 
-    return response.json(missions);
-  }
+		return response.json(missions);
+	}
 }
 
 module.exports = FortniteController;
